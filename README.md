@@ -41,8 +41,9 @@ account. To link this app to an account, use the following instructions.
 Two steps are necessary to connect the app to a Dropbox account. First,
 you must register this app with Dropbox to obtain a valid key. (Usually, this
 means using your Dropbox account to register a new app.) It's important that
-you require full access to the client's account, otherwise the app will just
-display an empty folder. 
+you request full access to the client's account, otherwise the app will just
+display an empty folder. Also, set the appropriate scope permissions to enable
+reading access to file contents and metadata.
 
 Second, you must require access to a Dropbox account, which will be 
 visualized by the app. You may use your own account as well as any.
