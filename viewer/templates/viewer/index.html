@@ -1,0 +1,63 @@
+{% extends 'viewer/base.html' %}
+{% block title %}File List{% endblock %}
+{% block content %}
+    <!-- Page title -->
+    <div class="container mt-2">
+        <div class="page-header">
+            <h2>
+                {% if url == '' %} 
+                    <i class='bi bi-hdd'></i> Root
+                {% else %}
+                    <i class='bi bi-folder'></i> {{ current }}
+                {% endif %}
+            </h2>
+            <p><small>
+                {% for level in levels %}
+                    {% if level.name == '' %} 
+                        <a href="{% url 'index' %}"
+                            class="text-decoration-none"-->
+                            <i class='bi bi-hdd'></i> Root
+                        </a>
+                    {% else %}
+                        <a href="{% url 'folder' level.url %}"
+                            class="text-decoration-none"-->
+                            <i class='bi bi-folder'></i> {{ level.name }}
+                        </a>
+                    {% endif %}
+                    &nbsp; / &nbsp;
+                {% endfor %}
+            </small></p>
+        </div>
+        <hr>
+        <div class='row g-1'>
+            {% for file in files %}
+                {% if file.is_dir %}
+                    <div class='col-md-10 bg-light text-primary text-truncate'>
+                        <a href="{% url 'folder' file.url %}"
+                           class="text-decoration-none text-reset"-->
+                            <i class='bi bi-folder-fill'></i> {{ file.name }}
+                        </a>
+                    </div>
+                {% else %}
+                    <div class='col-md-9 bg-light text-black text-truncate'>
+                        <a href="{% url 'file' file.url %}"
+                           class="text-decoration-none text-reset"-->
+                            <i class='bi bi-file-earmark'></i> {{ file.name }}
+                        </a>
+                    </div>
+                    <div class='col-md-1 bg-light text-secondary text-center'>
+                        {{ file.size }}
+                    </div>
+                {% endif %}
+                <div class='col-md-2 bg-light text-secondary text-center'>
+                    {{ file.date|date:"Y-m-d H:i" }}
+                </div>
+            {% empty %}
+                <div class='col-md-12 text-secondary'>
+                    <small>The directory is empty</small>
+                </div>
+            {% endfor %}
+        </div>
+        <hr class='mb-2'>
+    </div>
+{% endblock %}
