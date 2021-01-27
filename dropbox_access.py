@@ -12,7 +12,12 @@ def create_file_with_app_key():
     print('\nThis application must first be registered at Dropbox.')
     print('1. Goto to: ' + developers_url) 
     print('2. Create an app, requesting full access to files.')
-    print('3. Once the app is registered, copy the app key.')
+    print('3. On the app\'s configuration page, click on "Permissions" and')
+    print('   select the following scope options:')
+    print('     * files.metadata.read')
+    print('     * files.content.read')
+    print('   and then click on "Submit" to commit the changes.')
+    print('4. Return to the app\'s "Settings", and copy the app key. ')
     app_key = input("\nEnter the app key here: ").strip()
     
     with open(DROPBOX_KEYS_FILENAME, 'w') as keyfile:
@@ -23,6 +28,7 @@ def create_file_with_app_key():
 def get_token_for_app_key(app_key):
     auth_flow = DropboxOAuth2FlowNoRedirect(app_key, use_pkce=True, 
             token_access_type='offline')
+
     authorize_url = auth_flow.start()
     
     print('\nThis application must gain access to a Dropbox account.')
