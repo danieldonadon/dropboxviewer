@@ -3,7 +3,7 @@
 This is a Django sample app to visualize and download files from a 
 Dropbox account.
 
-# Dependencies
+## Dependencies
 
 In order to run this app, you must install `django` and `dropbox` from the
 PyPI repository.
@@ -65,10 +65,10 @@ If all the configuration was done correctly, the app should display the
 contents of the linked Dropbox account. You can browse its folders and download
 its files.
 
-# Credits
+## Credits
 
 This sample is based on examples and ideas taken from API
 documentations and other sources. In particular, it incorporates a 
-custom ``Storage`` class written by Anthony Monthe, also available as
-the PyPI package ``django-storages``.
+custom ``Storage`` class written by Anthony Monthe, also available 
+from the PyPI package ``django-storages``.
 
