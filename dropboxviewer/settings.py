@@ -120,6 +120,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 # Custom settings
-DROPBOX_KEY_FILE = 'dropbox.key'
+DROPBOX_APP_KEY = 'bgoij6ipeipwsk1'
+
