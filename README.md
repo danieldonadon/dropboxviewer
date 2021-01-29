@@ -19,6 +19,11 @@ To install the app, execute the following commands in a terminal:
     cd dropboxviewer
     pip install -r requirements.txt
     python manage.py migrate
+```
+
+Then, to run the app, execute:
+
+```
     python manage.py runserver
 ```
 
