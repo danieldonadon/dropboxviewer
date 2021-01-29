@@ -1,75 +1,50 @@
 # dropboxviewer
 
-This is a Django sample app to visualize and download files from a 
-Dropbox account.
+This is a Django sample app that allows basic file manipulation using Dropbox
+storage. After connecting to a Dropbox account, you can navigate its folders,
+download its files, and upload new documents.
 
-## Dependencies
+This app was created as a programming exercise to learn Django, and 
+it has no pretension to following good practices of software development.
 
-In order to run this app, you must install `django` and `dropbox` from the
-PyPI repository.
 
-```
-pip install django
-pip install dropbox
-```
+## Installing and running
 
-The following versions were used when the app was written:
-
-* Python 3.9.1
-* Django 3.1.5
-* Dropbox Python API 11.0.0
-
-## Running
-
-From a terminal, run the following command inside the project folder:
+It's suggested that you run this app in a 
+[Python virtual environment](https://docs.python.org/3/tutorial/venv.html).
+To install the app, execute the following commands in a terminal:
 
 ```
-python manage.py runserver
+    git clone https://www.github.com/danieldonadon/dropboxviewer.git
+    pip install -r requirements.txt
+    python manage.py migrate
+    python manage.py runserver
 ```
 
 To access the app, open the following link in your browser:
 
-```
-http://localhost:8000/viewer/
-```
+    http://localhost:8000/viewer/
 
-It will possibly display an error message, saying it cannot access a Dropbox
-account. To link this app to an account, use the following instructions.
 
 ## Connecting to a Dropbox account
 
-Two steps are necessary to connect the app to a Dropbox account. First,
-you must register this app with Dropbox to obtain a valid key. (Usually, this
-means using your Dropbox account to register a new app.) It's important that
-you request full access to the client's account, otherwise the app will just
-display an empty folder. Also, set the appropriate scope permissions to enable
-reading access to file contents and metadata.
+The first time you run the app, it will request authorization to access a 
+Dropbox account. Simple click on the "Request" button and follow the 
+instruction. This app requests full access to all files in order to 
+function as intended. You may rest assured, however, that the app will never
+delete any document at all, but be aware that uploading files _may_ modify
+existing documents of the same name.
 
-Second, you must require access to a Dropbox account, which will be 
-visualized by the app. You may use your own account as well as any.
+You may opt to create your own app registration at 
+[Dropbox Developer's App Console](https://www.dropbox.com/developers/apps).
+If you do, replace the ``DROPBOX_APP_KEY`` on ``dropboxviewer/settings.py``
+with your own app key.
 
-This process is partially automated by executing the following script:
-
-```
-python dropbox_access.py
-```
-
-It will follow the above steps, asking you to access some Dropbox web pages
-in order to obtain authorization tokens. Follow the instructions and input the
-tokens accordingly. At the end, the script will check if the connection was
-successful. If not, remove the newly-created file ``dropbox.key`` and try
-again.
-
-## What does it do?
-
-If all the configuration was done correctly, the app should display the
-contents of the linked Dropbox account. You can browse its folders and download
-its files.
 
 ## Credits
 
 This sample is based on examples and ideas taken from API
-documentations and other sources. In particular, it incorporates a 
+documentations and many other sources. In particular, it incorporates a 
 custom ``Storage`` class written by Anthony Monthe, also available 
 from the PyPI package ``django-storages``.
 

@@ -5,6 +5,12 @@ from .dropbox import DropBoxStorage
 
 # ----------------------------------------------------------------------------
 def human_readable(size):
+    '''
+    Create a human readable representation of a quantity in bytes. 
+
+    The numerical quantity is expressed by a three-digits float, followed by
+    a suffix (e.g., 12345 -> '12.0 KB').
+    '''
     if size < 1024:
         return size
     seq = ['', ' KB', ' MB', ' GB', ' TB']
@@ -20,6 +26,16 @@ def human_readable(size):
 
 # ----------------------------------------------------------------------------
 class DropboxMetaFile:
+    '''This class contains some information about a Dropbox file.
+
+    Attributes:
+    path   : the file's absolute path in Dropbox
+    url    : same as path, but without the initial '/'
+    name   : the file's name
+    is_dir : whether the file is a directory
+    date   : the server's date when the file was last modified
+    size   : the file's size as a human readable string
+    '''
 
     # ........................................................................
     def __init__(self, metadata):
@@ -36,6 +52,11 @@ class DropboxMetaFile:
 
 # ----------------------------------------------------------------------------
 class DropboxWrapper():
+    '''This class offer simple access to Dropbox API.
+
+    It uses Monthe's custom Storage class to access Dropbox files, but also
+    explores other methods from Dropbox API.
+    '''
 
     # ........................................................................
     def __init__(self, app_key):
@@ -44,6 +65,16 @@ class DropboxWrapper():
 
     # ........................................................................
     def request_access(self, session, redirect):
+        '''Start authorization request to access a Dropbox account.
+        
+        Return a URL that must be accessed by the user in order to grant
+        authorization to his Dropbox account.
+
+        Parameters:
+        session  : dict containing the current session information
+        redirect : URL that will be redirected after authorization is granted;
+                   validation data will be passed by GET
+        '''
         self.auth = DropboxOAuth2Flow(
                 self.app_key,
                 redirect,
@@ -55,12 +86,19 @@ class DropboxWrapper():
 
     # ........................................................................
     def conclude_access(self, query):
+        '''Conclude authorization process, granting access to Dropbox.
+
+        Return True if the access was granted.
+        
+        Parameter:
+        query : dict containing the GET information sent to a redirected URL
+        '''
         try:
             result = self.auth.finish(query)
             self.storage = DropBoxStorage(
                     oauth2_access_token=result.access_token)
-            self.storage.client.users_get_current_account() # try to connect
-            return True
+            # Try to connect the API or raise an exception
+            return self.has_access()
         except Exception as e:
             print(e)
             self.storage = None
@@ -68,11 +106,27 @@ class DropboxWrapper():
 
     # ........................................................................
     def has_access(self):
-        return self.storage
+        '''Whether there is access to a Dropbox account or not.'''
+        try:
+            self.storage.client.users_get_current_account() 
+            return True
+        except Exception as e:
+            self.storage = None
+            return False
 
     # ........................................................................
     def listdir(self, path):
-        # return self.storage.listdir(path)
+        '''List all files and directories in the given path.
+        
+        It is similar to Storage.listdir(), but instead of returning two
+        lists of names (one for folders and another for files), it returns
+        a single list of DropboxMetaFile. The list is sorted in alphabetical
+        order, and folders are places first. This method is faster than 
+        calling the API many times to obtain metadata for each file retrieved.
+
+        Parameter:
+        path : a Dropbox absolute path
+        '''
         result = self.storage.client.files_list_folder(path)
         files = list()
         for metadata in result.entries:
@@ -83,16 +137,33 @@ class DropboxWrapper():
 
     # ........................................................................
     def get_file(self, name):
+        '''Obtain a File object after its name.'''
         return self.storage.open(name)
 
     # ........................................................................
     def upload_file(self, path, upfile):
+        '''Upload a File object to Dropbox.
+
+        Parameters:
+        path   : the folder's absolute path where the file will be stored
+        upfile : the File object to be uploaded; its name is added to path 
+                 in order to create its final name on Dropbox
+        '''
         name = ('/' if path == '' else ('/' + path + '/')) + upfile.name
         self.storage.save(name, upfile)
         return name
 
     # ........................................................................
     def create_folder(self, path, name):
+        '''Create a folder in Dropbox.
+
+        If the new folder's name contains '/', it will create a hierarchy of
+        subfolders.
+
+        Parameters:
+        path : the folder's absolute path where the new folder will be created
+        name : the new folder's name
+        '''
         name = ('/' if path == '' else ('/' + path + '/')) + name
         self.storage.client.files_create_folder(name)
 
