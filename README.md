@@ -16,6 +16,7 @@ To install the app, execute the following commands in a terminal:
 
 ```
     git clone https://www.github.com/danieldonadon/dropboxviewer.git
+    cd dropboxviewer
     pip install -r requirements.txt
     python manage.py migrate
     python manage.py runserver
