@@ -2,10 +2,8 @@
 
 This is a Django sample app that allows basic file manipulation using Dropbox
 storage. After connecting to a Dropbox account, you can navigate its folders,
-download its files, and upload new documents.
-
-This app was created as a programming exercise to learn Django, and 
-it has no pretension to following good practices of software development.
+download its files, and upload new documents. This app was created as a 
+programming exercise to learn Django.
 
 
 ## Installing and running
