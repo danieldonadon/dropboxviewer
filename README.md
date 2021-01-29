@@ -22,9 +22,7 @@ To install the app, execute the following commands in a terminal:
     python manage.py runserver
 ```
 
-To access the app, open the following link in your browser:
-
-    http://localhost:8000/viewer/
+To access the app, open the following link in your browser: http://localhost:8000/viewer/
 
 
 ## Connecting to a Dropbox account
