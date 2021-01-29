@@ -61,7 +61,6 @@ class DropboxWrapper():
     # ........................................................................
     def __init__(self, app_key):
         self.app_key = app_key
-        self.storage = None
 
     # ........................................................................
     def request_access(self, session, redirect):
@@ -97,11 +96,9 @@ class DropboxWrapper():
             result = self.auth.finish(query)
             self.storage = DropBoxStorage(
                     oauth2_access_token=result.access_token)
-            # Try to connect the API or raise an exception
             return self.has_access()
         except Exception as e:
             print(e)
-            self.storage = None
             return False
 
     # ........................................................................
@@ -110,8 +107,7 @@ class DropboxWrapper():
         try:
             self.storage.client.users_get_current_account() 
             return True
-        except Exception as e:
-            self.storage = None
+        except Exception:
             return False
 
     # ........................................................................
